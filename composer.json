@@ -1,0 +1,19 @@
+{
+  "name": "marvtr/Quicksilver",
+  "type": "package",
+  "description": "ontavio email service",
+  "keywords": ["email","service","spooler"],
+  "homepage": "https://ontavio.de",
+  "license": "MIT",
+  "require": {
+
+  },
+  "authors": [
+    {
+      "name": "ontavio",
+      "email": "support@ontavio.de",
+      "homepage": "http://ontavio.de",
+      "role": "company"
+    }
+  ]
+}
