@@ -1,5 +1,6 @@
 {
   "name": "marvtr/quicksilver",
+  "version": "1.0.0"
   "type": "package",
   "description": "ontavio email service",
   "keywords": ["email","service","spooler"],
