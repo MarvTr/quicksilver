@@ -15,5 +15,10 @@
       "homepage": "http://ontavio.de",
       "role": "company"
     }
-  ]
+  ],
+  "autoload": {
+    "psr-4": {
+      "Quicksilver\\": "src/"
+    }
+  }
 }
