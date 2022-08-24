@@ -1,5 +1,5 @@
 {
-  "name": "marvtr/Quicksilver",
+  "name": "marvtr/quicksilver",
   "type": "package",
   "description": "ontavio email service",
   "keywords": ["email","service","spooler"],
