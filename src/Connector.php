@@ -37,12 +37,11 @@ class Connector
      * @param bool    $generateTextFromHTML
      * @param bool    $convertHtmlToText
      */
-    public function __construct(string $endpoint = "", string $auth = "", bool $generateTextFromHTML = true, bool $convertHtmlToText = true, array $replaceProjectSpecific = [])
+    public function __construct(string $endpoint = "", string $auth = "", bool $generateTextFromHTML = true, array $replaceProjectSpecific = [])
     {
         $this->endpoint = $endpoint;
         $this->auth = $auth;
         $this->generateTextFromHTML = $generateTextFromHTML;
-        $this->convertHtmlToText = $convertHtmlToText;
         $this->replaceProjectSpecific = $replaceProjectSpecific;
     }
 
