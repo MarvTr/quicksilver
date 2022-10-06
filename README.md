@@ -35,7 +35,7 @@ Documentation for ontavio mail service connector
   - enable "subject" field formatting to make Email less likely to be marked as spam.
 
 
-- $convertHtmlToText
+- $generateTextFromHTML
   - fill "text" field with content from "html" field.
 
 ### Functions
