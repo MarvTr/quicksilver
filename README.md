@@ -2,9 +2,7 @@
 Documentation for ontavio mail service connector
 
 ----------------
-**TODO** and possible Features:
-
-- 
+**TODO** and planned Features:
 
 ----------------
 ## Set up connector
