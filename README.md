@@ -40,7 +40,7 @@ Documentation for ontavio mail service connector
 
 ### Functions
 
-**NOTE:** if a function finished successfully it returns json, on failure it returns null
+**NOTE:** if a function finished successfully it returns data, on failure it returns null
 
 - setEndpoint(string $newEndpoint)
   - override endpoint string
