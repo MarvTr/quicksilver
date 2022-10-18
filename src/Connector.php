@@ -17,10 +17,12 @@ class Connector
      * @var string
      */
     private $endpoint;
+
     /**
      * @var string
      */
     private $auth;
+
     /**
      * @var bool
      */
@@ -35,6 +37,7 @@ class Connector
      * @param string  $endpoint
      * @param string  $auth
      * @param bool    $generateTextFromHTML
+     * @param array   $replaceProjectSpecific
      */
     public function __construct(string $endpoint = "", string $auth = "", bool $generateTextFromHTML = true, array $replaceProjectSpecific = [])
     {
@@ -120,7 +123,7 @@ class Connector
      * @param        $text
      * @param array  $replaceProjectSpecific
      *
-     * @return mixed|string|null
+     * @return array|string|string[]|null
      */
     public function removeAllHtml($text, array $replaceProjectSpecific)
     {
@@ -138,9 +141,7 @@ class Connector
         $text = preg_replace('/^ /m', '', $text); // if there are whitespaces at the beginning of a line, remove them
 
         //remove additional strings
-        $text = preg_replace('/\b(' . implode('|', $replaceProjectSpecific) . ')( )\b/', '', $text);
-
-        return $text;
+        return preg_replace('/\b(' . implode('|', $replaceProjectSpecific) . ')( )\b/', '', $text);
     }
 
 
@@ -151,7 +152,7 @@ class Connector
      *
      * @return json
      */
-    public function create(Email $email)
+    public function create(Email $email): json
     {
 
         //transform Datetime to DB format
@@ -205,29 +206,29 @@ class Connector
         $map = '{';
         for ($i = 0; count($email->getAttachments()) > $i; $i++) {
             $map .= '"file' . $i . '":["variables.attachments.' . $i . '"]';
-            //dont append , for last in array
+            //don't append , for last in array
             if ($i != count($email->getAttachments()) - 1) {
                 $map .= ',';
             }
         }
         $map .= '}';
 
-        array_push($options['multipart'], [
+        $options['multipart'][] = [
             'name' => 'map',
             'contents' => $map,
-        ]);
+        ];
 
         //push uploads as multipart form file
         $loop = 0;
         foreach ($email->getAttachments() as $file) {
-            array_push($options['multipart'], [
+            $options['multipart'][] = [
                 'name' => 'file' . $loop,
                 'contents' => Psr7\try_fopen($file->getFilePath(), 'r'),
                 'filename' => $file->getFileName(),
                 'headers' => [
                     'Content-Type' => '<Content-type header>',
                 ],
-            ]);
+            ];
             $loop++;
         };
 
@@ -244,12 +245,12 @@ class Connector
      *
      * @return json
      */
-    public function update(Email $email)
+    public function update(Email $email): ?json
     {
         $targetId = $this->getEmailId($email->getEId());
 
         $text = "";
-        if ($this->generateTextFromHTML == true && empty($email->getText())) {
+        if ($this->generateTextFromHTML === true && empty($email->getText())) {
             $text = $this->removeAllHtml($email->getHtml(), $this->replaceProjectSpecific);
         } else {
             $text = $email->getText();
@@ -301,29 +302,29 @@ class Connector
         $map = '{';
         for ($i = 0; count($email->getAttachments()) > $i; $i++) {
             $map .= '"file' . $i . '":["variables.attachments.' . $i . '"]';
-            //dont append , for last in array
+            //don't append , for last in array
             if ($i != count($email->getAttachments()) - 1) {
                 $map .= ',';
             }
         }
         $map .= '}';
 
-        array_push($options['multipart'], [
+        $options['multipart'][] = [
             'name' => 'map',
             'contents' => $map,
-        ]);
+        ];
 
         //push uploads as multipart form file
         $loop = 0;
         foreach ($email->getAttachments() as $file) {
-            array_push($options['multipart'], [
+            $options['multipart'][] = [
                 'name' => 'file' . $loop,
                 'contents' => Psr7\try_fopen($file->getFilePath(), 'r'),
                 'filename' => $file->getFileName(),
                 'headers' => [
                     'Content-Type' => '<Content-type header>',
                 ],
-            ]);
+            ];
             $loop++;
         };
 
@@ -337,12 +338,11 @@ class Connector
     }
 
     /**
-     * @param string  $auth
-     * @param string  $emailId
+     * @param string  $emailEId
      *
-     * @return string
+     * @return Email|null
      */
-    public function read(string $emailEId)
+    public function read(string $emailEId): ?Email
     {
         //missing "project" and "stack" field, not needed currently
         $query = '{"query": "query{ getEmailViaEId( eId: \\"' . $emailEId . '\\"){ attachments{id chunkSize contentType filename length uploadDate} attachDataUrls bcc cc delivery eId html htmlTemplate messageIds priority replyTo sender single subject templateData text textTemplate to } } " }';
@@ -367,8 +367,7 @@ class Connector
         $result = $this->executeQuery($this->endpoint, $query, $this->auth)->data;
 
         if (array_key_exists('getEmailViaEId', $result ?? [])) {
-            $result = $result->getEmailViaEId;
-            return $result;
+            return $result->getEmailViaEId;
         }
         return null;
     }
@@ -384,18 +383,17 @@ class Connector
         $result = $this->executeQuery($this->endpoint, $query, $this->auth)->data;
 
         if (array_key_exists('getEmailViaEId', $result ?? [])) {
-            $result = $result->getEmailViaEId->id;
-            return $result;
+            return $result->getEmailViaEId->id;
         }
         return null;
     }
 
     /**
-     * @param string  $emailId
+     * @param string  $emailEId
      *
-     * @return string
+     * @return string|null
      */
-    public function delete(string $emailEId)
+    public function delete(string $emailEId): ?string
     {
         $databaseId = $this->getEmailId($emailEId);
         $query = '{"query": "mutation{ deleteEmail(id: \\"' . $databaseId . '\\"){id eId} } " }';
