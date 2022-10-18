@@ -84,7 +84,7 @@ class Email
      *
      * @return Email
      */
-    public function setAttachments($attachments)
+    public function setAttachments($attachments): Email
     {
         $this->attachments = $attachments;
         return $this;
@@ -95,7 +95,7 @@ class Email
      *
      * @return Email
      */
-    public function setAttachDataUrls($attachDataUrls)
+    public function setAttachDataUrls(bool $attachDataUrls): Email
     {
         $this->attachDataUrls = $attachDataUrls;
         return $this;
@@ -106,7 +106,7 @@ class Email
      *
      * @return Email
      */
-    public function setBcc($bcc)
+    public function setBcc(array $bcc): Email
     {
         $this->bcc = $bcc;
         return $this;
@@ -117,7 +117,7 @@ class Email
      *
      * @return Email
      */
-    public function setCc($cc)
+    public function setCc(array $cc): Email
     {
         $this->cc = $cc;
         return $this;
@@ -128,7 +128,7 @@ class Email
      *
      * @return Email
      */
-    public function setDelivery($delivery)
+    public function setDelivery($delivery): Email
     {
         $this->delivery = $delivery;
         return $this;
@@ -139,7 +139,7 @@ class Email
      *
      * @return Email
      */
-    public function setEId($eId)
+    public function setEId(string $eId): Email
     {
         $this->eId = $eId;
         return $this;
@@ -150,7 +150,7 @@ class Email
      *
      * @return Email
      */
-    public function setHtml($html)
+    public function setHtml(string $html): Email
     {
         $this->html = $html;
         return $this;
@@ -161,7 +161,7 @@ class Email
      *
      * @return Email
      */
-    public function setHtmlTemplate($htmlTemplate)
+    public function setHtmlTemplate(string $htmlTemplate): Email
     {
         $this->htmlTemplate = $htmlTemplate;
         return $this;
@@ -172,7 +172,7 @@ class Email
      *
      * @return Email
      */
-    public function setMessageId($messageId)
+    public function setMessageId(string $messageId): Email
     {
         $this->messageId = $messageId;
         return $this;
@@ -183,7 +183,7 @@ class Email
      *
      * @return Email
      */
-    public function setPriority($priority)
+    public function setPriority(string $priority): Email
     {
         $this->priority = $priority;
         return $this;
@@ -194,7 +194,7 @@ class Email
      *
      * @return Email
      */
-    public function setProject($project)
+    public function setProject(string $project): Email
     {
         $this->project = $project;
         return $this;
@@ -205,7 +205,7 @@ class Email
      *
      * @return Email
      */
-    public function setReplyTo($replyTo)
+    public function setReplyTo(string $replyTo): Email
     {
         $this->replyTo = $replyTo;
         return $this;
@@ -216,7 +216,7 @@ class Email
      *
      * @return Email
      */
-    public function setSender($sender)
+    public function setSender(string $sender): Email
     {
         $this->sender = $sender;
         return $this;
@@ -227,7 +227,7 @@ class Email
      *
      * @return Email
      */
-    public function setSingle($single)
+    public function setSingle(bool $single): Email
     {
         $this->single = $single;
         return $this;
@@ -238,7 +238,7 @@ class Email
      *
      * @return Email
      */
-    public function setStack($stack)
+    public function setStack($stack): Email
     {
         $this->stack = $stack;
         return $this;
@@ -249,7 +249,7 @@ class Email
      *
      * @return Email
      */
-    public function setSubject($subject)
+    public function setSubject(string $subject): Email
     {
         $this->subject = $subject;
         return $this;
@@ -260,7 +260,7 @@ class Email
      *
      * @return Email
      */
-    public function setTemplateData($templateData)
+    public function setTemplateData(string $templateData): Email
     {
         $this->templateData = $templateData;
         return $this;
@@ -271,7 +271,7 @@ class Email
      *
      * @return Email
      */
-    public function setText($text)
+    public function setText(string $text): Email
     {
         $this->text = $text;
         return $this;
@@ -282,7 +282,7 @@ class Email
      *
      * @return Email
      */
-    public function setTextTemplate($textTemplate)
+    public function setTextTemplate(string $textTemplate): Email
     {
         $this->textTemplate = $textTemplate;
         return $this;
@@ -293,7 +293,7 @@ class Email
      *
      * @return Email
      */
-    public function setTo($to)
+    public function setTo(array $to): Email
     {
         $this->to = $to;
         return $this;
