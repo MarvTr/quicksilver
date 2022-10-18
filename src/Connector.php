@@ -159,7 +159,7 @@ class Connector
         $transform = new DateTimeToStringTransformer(null, null, "Y-m-d\TH:i:s.v\Z");
 
         $text = "";
-        if ($this->generateTextFromHTML == true && empty($email->getText())) {
+        if ($this->generateTextFromHTML === true && empty($email->getText())) {
             $text = $this->removeAllHtml($email->getHtml(), $this->replaceProjectSpecific);
         } else {
             $text = $email->getText();
@@ -189,50 +189,7 @@ class Connector
         } else {
             $query = '{"query": "mutation ($attachments: [Upload!]){createEmail(input: {subject: \\"' . $email->getSubject() . '\\",messageId: \\"' . $email->getMessageId() . '\\",delivery:\\"' . $transform->transform($email->getDelivery()) . '\\",sender: \\"' . $email->getSender() . '\\",single: ' . json_encode($email->isSingle()) . ',priority: ' . $email->getPriority() . ',templateData: \\"' . $email->getTemplateData() . '\\",eId: \\"' . $email->getEId() . '\\",to: [\\"' . implode('","', $email->getTo()) . '\\"],cc: [\\"' . implode('\\",\\"', $email->getCc()) . '\\"],bcc: [\\"' . implode('\\",\\"', $email->getBcc()) . '\\"],text: \\"' . $text . '\\",textTemplate: \\"' . $email->getTextTemplate() . '\\",html: \\"' . $email->getHtml() . '\\",htmlTemplate: \\"' . $email->getHtmlTemplate() . '\\" ,project: \\"' . $email->getProject() . '\\",replyTo: \\"' . $email->getReplyTo() . '\\",attachDataUrls: ' . json_encode($email->isSingle()) . ',attachments: $attachments}) {id}}"}';
         }
-
-        $client = new Client();
-        $headers = [
-            'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQG9udGF2aW8uZGUiLCJpYXQiOjE2NjMyMjU3ODV9.NwZlzKYaSBAt4xpJxt-6g0qmtDZBELzfvx-TgiFaHuw',
-        ];
-        $options = [
-            'multipart' => [
-                [
-                    'name' => 'operations',
-                    'contents' => $query,
-                ],
-            ]];
-
-        //push file map depending on how many uploads are defined
-        $map = '{';
-        for ($i = 0; count($email->getAttachments()) > $i; $i++) {
-            $map .= '"file' . $i . '":["variables.attachments.' . $i . '"]';
-            //don't append , for last in array
-            if ($i != count($email->getAttachments()) - 1) {
-                $map .= ',';
-            }
-        }
-        $map .= '}';
-
-        $options['multipart'][] = [
-            'name' => 'map',
-            'contents' => $map,
-        ];
-
-        //push uploads as multipart form file
-        $loop = 0;
-        foreach ($email->getAttachments() as $file) {
-            $options['multipart'][] = [
-                'name' => 'file' . $loop,
-                'contents' => Psr7\try_fopen($file->getFilePath(), 'r'),
-                'filename' => $file->getFileName(),
-                'headers' => [
-                    'Content-Type' => '<Content-type header>',
-                ],
-            ];
-            $loop++;
-        };
-
-        $request = new Request('POST', $this->endpoint, $headers);
+        [$client, $options, $request] = $this->sendDataToService($query, $email);
         $res = $client->sendAsync($request, $options)->wait();
 
         return json_decode($res->getBody()->getContents());
@@ -286,49 +243,7 @@ class Connector
             $query = '{"query": "mutation ($attachments: [Upload!]){updateEmail( id: \\"' . $targetId . '\\",input: {subject: \\"' . $email->getSubject() . '\\",messageId: \\"' . $email->getMessageId() . '\\",delivery:\\"' . $transform->transform($email->getDelivery()) . '\\",sender: \\"' . $email->getSender() . '\\",single: ' . json_encode($email->isSingle()) . ',priority: ' . $email->getPriority() . ',templateData: \\"' . $email->getTemplateData() . '\\",eId: \\"' . $email->getEId() . '\\",to: [\\"' . implode('","', $email->getTo()) . '\\"],cc: [\\"' . implode('\\",\\"', $email->getCc()) . '\\"],bcc: [\\"' . implode('\\",\\"', $email->getBcc()) . '\\"],text: \\"' . $text . '\\",textTemplate: \\"' . $email->getTextTemplate() . '\\",html: \\"' . $email->getHtml() . '\\",htmlTemplate: \\"' . $email->getHtmlTemplate() . '\\" ,project: \\"' . $email->getProject() . '\\",replyTo: \\"' . $email->getReplyTo() . '\\",attachments: $attachments}) {id}}"}';
         }
 
-        $client = new Client();
-        $headers = [
-            'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQG9udGF2aW8uZGUiLCJpYXQiOjE2NjMyMjU3ODV9.NwZlzKYaSBAt4xpJxt-6g0qmtDZBELzfvx-TgiFaHuw',
-        ];
-        $options = [
-            'multipart' => [
-                [
-                    'name' => 'operations',
-                    'contents' => $query,
-                ],
-            ]];
-
-        //push file map depending on how many uploads are defined
-        $map = '{';
-        for ($i = 0; count($email->getAttachments()) > $i; $i++) {
-            $map .= '"file' . $i . '":["variables.attachments.' . $i . '"]';
-            //don't append , for last in array
-            if ($i != count($email->getAttachments()) - 1) {
-                $map .= ',';
-            }
-        }
-        $map .= '}';
-
-        $options['multipart'][] = [
-            'name' => 'map',
-            'contents' => $map,
-        ];
-
-        //push uploads as multipart form file
-        $loop = 0;
-        foreach ($email->getAttachments() as $file) {
-            $options['multipart'][] = [
-                'name' => 'file' . $loop,
-                'contents' => Psr7\try_fopen($file->getFilePath(), 'r'),
-                'filename' => $file->getFileName(),
-                'headers' => [
-                    'Content-Type' => '<Content-type header>',
-                ],
-            ];
-            $loop++;
-        };
-
-        $request = new Request('POST', $this->endpoint, $headers);
+        [$client, $options, $request] = $this->sendDataToService($query, $email);
         $result = json_decode($client->sendAsync($request, $options)->wait()->getBody()->getContents());
 
         if (array_key_exists("errors", $result)) {
@@ -401,6 +316,61 @@ class Connector
             return $this->executeQuery($this->endpoint, $query, $this->auth)->data->deleteEmail;
         }
         return null;
+    }
+
+
+    /**
+     * @param string  $query
+     * @param Email   $email
+     *
+     * @return array
+     */
+    public function sendDataToService(string $query, Email $email): array
+    {
+        $client = new Client();
+        $headers = [
+            'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQG9udGF2aW8uZGUiLCJpYXQiOjE2NjMyMjU3ODV9.NwZlzKYaSBAt4xpJxt-6g0qmtDZBELzfvx-TgiFaHuw',
+        ];
+        $options = [
+            'multipart' => [
+                [
+                    'name' => 'operations',
+                    'contents' => $query,
+                ],
+            ]];
+
+        //push file map depending on how many uploads are defined
+        $map = '{';
+        for ($i = 0; count($email->getAttachments()) > $i; $i++) {
+            $map .= '"file' . $i . '":["variables.attachments.' . $i . '"]';
+            //don't append , for last in array
+            if ($i != count($email->getAttachments()) - 1) {
+                $map .= ',';
+            }
+        }
+        $map .= '}';
+
+        $options['multipart'][] = [
+            'name' => 'map',
+            'contents' => $map,
+        ];
+
+        //push uploads as multipart form file
+        $loop = 0;
+        foreach ($email->getAttachments() as $file) {
+            $options['multipart'][] = [
+                'name' => 'file' . $loop,
+                'contents' => Psr7\try_fopen($file->getFilePath(), 'r'),
+                'filename' => $file->getFileName(),
+                'headers' => [
+                    'Content-Type' => '<Content-type header>',
+                ],
+            ];
+            $loop++;
+        };
+
+        $request = new Request('POST', $this->endpoint, $headers);
+        return [$client, $options, $request];
     }
 }
 
