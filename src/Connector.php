@@ -68,6 +68,13 @@ class Connector
         $this->auth = $newAuth;
     }
 
+    /**
+     * @return string
+     */
+    public function getAuth(): string
+    {
+        return $this->auth;
+    }
 
     /**
      * log in as user and keep JWT active in connector object
@@ -108,7 +115,7 @@ class Connector
         $client = new Client();
         $headers = [
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . $auth,
+            'Authorization' => 'Bearer ' . $auth ?? $this->getAuth(),
         ];
 
         $request = new Request('POST', $endpoint, $headers, $query);
@@ -322,14 +329,15 @@ class Connector
     /**
      * @param string  $query
      * @param Email   $email
+     * @param string $auth
      *
      * @return array
      */
-    public function sendDataToService(string $query, Email $email): array
+    public function sendDataToService(string $query, Email $email, string $auth): array
     {
         $client = new Client();
         $headers = [
-            'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQG9udGF2aW8uZGUiLCJpYXQiOjE2NjMyMjU3ODV9.NwZlzKYaSBAt4xpJxt-6g0qmtDZBELzfvx-TgiFaHuw',
+            'Authorization' => 'Bearer ' . $auth ?? $this->getAuth(),
         ];
         $options = [
             'multipart' => [
