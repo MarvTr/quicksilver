@@ -130,9 +130,9 @@ class Connector
      * @param        $text
      * @param array  $replaceProjectSpecific
      *
-     * @return array|string|string[]|null
+     * @return string
      */
-    public function removeAllHtml($text, array $replaceProjectSpecific)
+    public function removeAllHtml($text, array $replaceProjectSpecific):string
     {
         /*
          * what doesn't work yet: remove all a tags and leave only the blank links
