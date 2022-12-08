@@ -1,19 +1,22 @@
 # Quicksilver
+
 Documentation for ontavio mail service connector
 
 ----------------
 **TODO** and planned Features:
 
 ----------------
+
 ## Set up connector
+
 1. create JWT token for project
-   - use loginAsUser() function or get JWT manually
+    - use loginAsUser() function or get JWT manually
 
 
 2. create new Connector() with
-   - $endpoint -> your database url
-   - $auth -> your JWT token used to verify user
-   - additional [parameters](#constructor-parameters) can be specified
+    - $endpoint -> your database url
+    - $auth -> your JWT token used to verify user
+    - additional [parameters](#constructor-parameters) can be specified
 
 
 3. use the functions under [functions](#functions) for CRUD actions
@@ -24,78 +27,79 @@ Documentation for ontavio mail service connector
 ### Constructor parameters
 
 - $endpoint
-  - set endpoint to connect to as string.
+    - set endpoint to connect to as string.
 
 
 - $auth
-  - insert JWT used to connect to endpoint.
+    - insert JWT used to connect to endpoint.
 
 
 - $unSpamSubject
-  - enable "subject" field formatting to make Email less likely to be marked as spam.
+    - enable "subject" field formatting to make Email less likely to be marked as spam.
 
 
 - $generateTextFromHTML
-  - fill "text" field with content from "html" field.
+    - fill "text" field with content from "html" field.
 
 ### Functions
 
 **NOTE:** if a function finished successfully it returns data, on failure it returns null
 
 - setEndpoint(string $newEndpoint)
-  - override endpoint string
+    - override endpoint string
 
 
 - setAuth(string $newAuth)
-  - override JWT authorization string
+    - override JWT authorization string
 
 
 - loginAsUser(string $endpoint, string $user, string $password)
-  - returns JWT token when giving valid endpoint, user and password 
-  - *ONLY use this to create initial JWT and save it*
+    - returns JWT token when giving valid endpoint, user and password
+    - *ONLY use this to create initial JWT and save it*
 
 
 - executeQuery(string $endpoint, string $query, string $auth)
-  - submits query to endpoint using auth
-  - returns query result
+    - submits query to endpoint using auth
+    - returns query result
 
 
 - removeAllHtml($text, array $replaceProjectSpecific)
-  - removes all html tags and additional strings in array
+    - removes all html tags and additional strings in array
 
 
 - create(Email $email)
-  - sends email to specified endpoint
-  - returns the created email id
+    - sends email to specified endpoint
+    - returns the created email id
 
 - read(string $emailEId)
-  - returns email based on $emailEId
+    - returns email based on $emailEId
 
 
 - readStatus(string $emailEId)
-  - returns "sent", "rejected" and "status" fields
+    - returns "sent", "rejected" and "status" fields
 
 
 - getEmailId(string $emailEId)
-  - returns emailId by searching email*E*Id
-  - mainly used for specific queries
+    - returns emailId by searching email*E*Id
+    - mainly used for specific queries
 
 
 - update(Email $email)
-  - updates whole email provided
-  - eId identifies email to update
-  - returns eId of updated mail on success
+    - updates whole email provided
+    - eId identifies email to update
+    - returns eId of updated mail on success
 
 
 - delete(string $emailEId)
-  - deletes email based on eId
-  - returns eId and id
-
+    - deletes email based on eId
+    - returns eId and id
 
 ### Email class
+
 Email class contains getters and setters for all parameters
+
 ```
-        $attachments -> use Attachment Class
+Attachment $attachments -> use Attachment Class
 bool    $attachDataUrls
 array   $bcc
 array   $cc

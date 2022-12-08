@@ -4,7 +4,13 @@ namespace Quicksilver;
 
 class Attachment
 {
+    /**
+     * @var string|string
+     */
     private $fileName;
+    /**
+     * @var string
+     */
     private $filePath;
 
     /**

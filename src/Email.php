@@ -3,33 +3,97 @@
 namespace Quicksilver;
 
 use Symfony\Component\Validator\Constraints\DateTime;
+use Quicksilver\Attachment;
 
-
+/**
+ * Provides basic email structure needed in Connector.php
+ *
+ */
 class Email
 {
+    /**
+     * @var Attachment
+     */
     private $attachments;
+    /**
+     * @var bool
+     */
     private $attachDataUrls;
+    /**
+     * @var array
+     */
     private $bcc; //string array
+    /**
+     * @var array
+     */
     private $cc; //string array
+    /**
+     * @var
+     */
     private $delivery; //Datetime
+    /**
+     * @var string
+     */
     private $eId;
+    /**
+     * @var string
+     */
     private $html;
+    /**
+     * @var string
+     */
     private $htmlTemplate;
+    /**
+     * @var string
+     */
     private $messageId;
+    /**
+     * @var string
+     */
     private $priority; // enum: LOW NORMAL HIGH
+    /**
+     * @var string
+     */
     private $project;
+    /**
+     * @var string
+     */
     private $replyTo;
+    /**
+     * @var string
+     */
     private $sender;
+    /**
+     * @var bool
+     */
     private $single;
+    /**
+     * @var
+     */
     private $stack; //EmailStackItemInput
+    /**
+     * @var string
+     */
     private $subject;
+    /**
+     * @var string
+     */
     private $templateData;
+    /**
+     * @var string
+     */
     private $text;
+    /**
+     * @var string
+     */
     private $textTemplate;
+    /**
+     * @var array
+     */
     private $to; //string array
 
     /**
-     * @param         $attachments
+     * @param Attachment $attachments
      * @param bool    $attachDataUrls
      * @param array   $bcc
      * @param array   $cc
@@ -50,7 +114,7 @@ class Email
      * @param string  $textTemplate
      * @param array   $to
      */
-    public function __construct( $attachments, bool $attachDataUrls, array $bcc, array $cc, $delivery, string $eId, string $html, string $htmlTemplate, string $messageId, $priority, string $project, string $replyTo, string $sender, bool $single, $stack, string $subject, string $templateData, string $text, string $textTemplate, array $to)
+    public function __construct(Attachment $attachments, bool $attachDataUrls, array $bcc, array $cc, $delivery, string $eId, string $html, string $htmlTemplate, string $messageId, $priority, string $project, string $replyTo, string $sender, bool $single, $stack, string $subject, string $templateData, string $text, string $textTemplate, array $to)
     {
         $this->attachments = $attachments;
         $this->attachDataUrls = $attachDataUrls;

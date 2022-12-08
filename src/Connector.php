@@ -329,7 +329,7 @@ class Connector
     /**
      * @param string  $query
      * @param Email   $email
-     * @param string $auth
+     * @param string  $auth
      *
      * @return array
      */
@@ -375,7 +375,7 @@ class Connector
                 ],
             ];
             $loop++;
-        };
+        }
 
         $request = new Request('POST', $this->endpoint, $headers);
         return [$client, $options, $request];
