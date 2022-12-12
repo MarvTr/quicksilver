@@ -151,7 +151,6 @@ class Connector
         return preg_replace('/\b(' . implode('|', $replaceProjectSpecific) . ')( )\b/', '', $text);
     }
 
-
     /**
      * create email
      *
@@ -276,6 +275,44 @@ class Connector
             return new Email($result->attachments, $result->attachDataUrls ?? false, $result->bcc, $result->cc, $result->delivery, $result->eId, $result->html, $result->htmlTemplate, '"' . implode(",", $result->messageIds) . '"', $result->priority, "", $result->replyTo, $result->sender, $result->single, "", $result->subject, $result->templateData, $result->text, $result->textTemplate, $result->to);
         }
         return null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isGenerateTextFromHTML(): bool
+    {
+        return $this->generateTextFromHTML;
+    }
+
+    /**
+     * @param bool  $generateTextFromHTML
+     *
+     * @return Connector
+     */
+    public function setGenerateTextFromHTML($generateTextFromHTML)
+    {
+        $this->generateTextFromHTML = $generateTextFromHTML;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getReplaceProjectSpecific(): array
+    {
+        return $this->replaceProjectSpecific;
+    }
+
+    /**
+     * @param array  $replaceProjectSpecific
+     *
+     * @return Connector
+     */
+    public function setReplaceProjectSpecific($replaceProjectSpecific)
+    {
+        $this->replaceProjectSpecific = $replaceProjectSpecific;
+        return $this;
     }
 
     /**
